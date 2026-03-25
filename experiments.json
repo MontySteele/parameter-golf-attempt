@@ -1,0 +1,282 @@
+{
+    "defaults": {
+        "TRAIN_BATCH_TOKENS": "131072",
+        "TRAIN_SEQ_LEN": "1024",
+        "WARMUP_STEPS": "0",
+        "VAL_LOSS_EVERY": "0",
+        "TRAIN_LOG_EVERY": "50",
+        "MAX_WALLCLOCK_SECONDS": "600",
+        "ITERATIONS": "20000",
+        "VOCAB_SIZE": "1024",
+        "MODEL_DIM": "512",
+        "NUM_HEADS": "8",
+        "NUM_KV_HEADS": "4",
+        "MLP_MULT": "2",
+        "TIE_EMBEDDINGS": "1",
+        "TIED_EMBED_LR": "0.05",
+        "MATRIX_LR": "0.04",
+        "SCALAR_LR": "0.04",
+        "SEED": "1337",
+        "NUM_REPEATS": "1",
+        "USE_REPEAT_ADAPTERS": "0",
+        "VAL_BATCH_SIZE": "131072"
+    },
+
+    "experiments": {
+
+        "baseline_float_9L": {
+            "description": "Original 9-layer float baseline",
+            "script": "train_gpt.py",
+            "NUM_LAYERS": "9"
+        },
+        "6bit_5Lx3_ada": {
+            "description": "5 layers x 3 repeats (15 eff depth, ~10M params)",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "5",
+            "NUM_REPEATS": "3",
+            "USE_REPEAT_ADAPTERS": "1"
+        },
+        "6bit_5Lx4_ada": {
+            "description": "5 layers x 4 repeats (20 eff depth, ~10M params)",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "5",
+            "NUM_REPEATS": "4",
+            "USE_REPEAT_ADAPTERS": "1"
+        },
+        "6bit_6Lx2_ada": {
+            "description": "6 layers x 2 repeats (12 eff depth, ~12M params)",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "6",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1"
+        },
+        "6bit_6Lx3_ada": {
+            "description": "6 layers x 3 repeats (18 eff depth, ~12M params)",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "6",
+            "NUM_REPEATS": "3",
+            "USE_REPEAT_ADAPTERS": "1"
+        },
+        "6bit_7Lx2": {
+            "description": "7 layers x 2 repeats without adapters",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "2"
+        },
+        "6bit_7Lx2_ada": {
+            "description": "7 layers x 2 repeats with adapters (current best)",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1"
+        },
+        "6bit_7Lx3_ada": {
+            "description": "7 layers x 3 repeats (21 eff depth)",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "3",
+            "USE_REPEAT_ADAPTERS": "1"
+        },
+        "6bit_8Lx2_ada": {
+            "description": "8 layers x 2 repeats (16 eff depth, balanced U-Net)",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "8",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1"
+        },
+        "6bit_8Lx3_ada": {
+            "description": "8 layers x 3 repeats (24 eff depth)",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "8",
+            "NUM_REPEATS": "3",
+            "USE_REPEAT_ADAPTERS": "1"
+        },
+
+        "6bit_7Lx2_ada_dim384": {
+            "description": "7Lx2 adapters, narrow dim=384",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1",
+            "MODEL_DIM": "384"
+        },
+        "6bit_7Lx2_ada_dim448": {
+            "description": "7Lx2 adapters, dim=448",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1",
+            "MODEL_DIM": "448"
+        },
+        "6bit_7Lx2_ada_dim576": {
+            "description": "7Lx2 adapters, dim=576",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1",
+            "MODEL_DIM": "576"
+        },
+        "6bit_7Lx2_ada_dim640": {
+            "description": "7Lx2 adapters, wide dim=640",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1",
+            "MODEL_DIM": "640"
+        },
+        "6bit_7Lx2_ada_dim768": {
+            "description": "7Lx2 adapters, very wide dim=768",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1",
+            "MODEL_DIM": "768"
+        },
+
+        "6bit_7Lx2_ada_mlp1": {
+            "description": "7Lx2 adapters, minimal MLP (1x)",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1",
+            "MLP_MULT": "1"
+        },
+        "6bit_7Lx2_ada_mlp3": {
+            "description": "7Lx2 adapters, wide MLP (3x)",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1",
+            "MLP_MULT": "3"
+        },
+        "6bit_7Lx2_ada_mlp4": {
+            "description": "7Lx2 adapters, very wide MLP (4x)",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1",
+            "MLP_MULT": "4"
+        },
+
+        "6bit_7Lx2_ada_kv2": {
+            "description": "7Lx2 adapters, 2 KV heads (more efficient)",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1",
+            "NUM_KV_HEADS": "2"
+        },
+        "6bit_7Lx2_ada_kv8": {
+            "description": "7Lx2 adapters, 8 KV heads (full MHA)",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1",
+            "NUM_KV_HEADS": "8"
+        },
+        "6bit_7Lx2_ada_heads16_kv4": {
+            "description": "7Lx2 adapters, 16 query heads (head_dim=32)",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1",
+            "NUM_HEADS": "16",
+            "NUM_KV_HEADS": "4"
+        },
+        "6bit_7Lx2_ada_heads4_kv4": {
+            "description": "7Lx2 adapters, 4 query heads (head_dim=128)",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1",
+            "NUM_HEADS": "4",
+            "NUM_KV_HEADS": "4"
+        },
+
+        "6bit_7Lx2_ada_lr_up20": {
+            "description": "7Lx2 adapters, LRs +20%",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1",
+            "TIED_EMBED_LR": "0.06",
+            "MATRIX_LR": "0.048",
+            "SCALAR_LR": "0.048"
+        },
+        "6bit_7Lx2_ada_lr_up50": {
+            "description": "7Lx2 adapters, LRs +50%",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1",
+            "TIED_EMBED_LR": "0.075",
+            "MATRIX_LR": "0.06",
+            "SCALAR_LR": "0.06"
+        },
+        "6bit_7Lx2_ada_lr_down20": {
+            "description": "7Lx2 adapters, LRs -20%",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1",
+            "TIED_EMBED_LR": "0.04",
+            "MATRIX_LR": "0.032",
+            "SCALAR_LR": "0.032"
+        },
+
+        "6bit_5Lx3_ada_dim640": {
+            "description": "5Lx3 adapters at dim=640 — fast steps, wider",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "5",
+            "NUM_REPEATS": "3",
+            "USE_REPEAT_ADAPTERS": "1",
+            "MODEL_DIM": "640"
+        },
+        "6bit_6Lx3_ada_dim576": {
+            "description": "6Lx3 adapters at dim=576",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "6",
+            "NUM_REPEATS": "3",
+            "USE_REPEAT_ADAPTERS": "1",
+            "MODEL_DIM": "576"
+        },
+        "6bit_6Lx2_ada_dim640": {
+            "description": "6Lx2 adapters at dim=640",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "6",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1",
+            "MODEL_DIM": "640"
+        },
+        "6bit_7Lx2_ada_dim576_mlp3": {
+            "description": "7Lx2 adapters, dim=576, MLP 3x",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1",
+            "MODEL_DIM": "576",
+            "MLP_MULT": "3"
+        },
+        "6bit_8Lx2_ada_dim576": {
+            "description": "8Lx2 adapters at dim=576",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "8",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1",
+            "MODEL_DIM": "576"
+        },
+
+        "6bit_5Lx3_noadapt": {
+            "description": "5Lx3 without adapters (ablation)",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "5",
+            "NUM_REPEATS": "3"
+        },
+        "6bit_6Lx3_noadapt": {
+            "description": "6Lx3 without adapters (ablation)",
+            "script": "train_gpt_6bit.py",
+            "NUM_LAYERS": "6",
+            "NUM_REPEATS": "3"
+        }
+    }
+}

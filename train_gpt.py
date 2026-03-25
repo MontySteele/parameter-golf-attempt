@@ -27,6 +27,50 @@ import torch.nn.functional as F
 from torch import Tensor, nn
 from torch.nn.parallel import DistributedDataParallel as DDP
 
+
+# Quant function
+
+def fake_quantize_4bit(w: Tensor) -> Tensor:
+    """
+    Simulate symmetric per-row 4-bit quantization with straight-through estimator.
+ 
+    Forward pass: weights are quantized to 4-bit precision (16 levels, range [-7, 7])
+                  then immediately dequantized back to float. The model "sees" the
+                  precision loss during every forward pass.
+ 
+    Backward pass: gradients flow through as if this function were identity.
+                   This is the "straight-through estimator" (STE) — we pretend
+                   the rounding didn't happen for gradient purposes.
+ 
+    Only applied to 2D weight matrices (the big linear layers).
+    Small tensors are left alone.
+    """
+    # Only quantize 2D matrices — skip biases, scalars, embeddings
+    if w.ndim != 2:
+        return w
+ 
+    # Compute per-row scale: map the largest absolute value in each row to 7
+    # This matches the quantization scheme used at export time, but for 4-bit
+    # instead of 8-bit. Per-row (not per-tensor) gives much better precision
+    # because different rows can have very different magnitude ranges.
+    row_max = w.abs().amax(dim=1, keepdim=True).clamp(min=1e-8)
+    scale = row_max / 31.0
+    w_q = (w / scale).round().clamp(-31, 31)
+ 
+    # Dequantize: multiply back by scale to get float approximation
+    w_deq = w_q * scale
+ 
+    # Straight-through estimator trick:
+    # w_deq.detach() - w.detach() gives us the "quantization noise" as a constant
+    # (no gradient flows through it). Adding w back makes the gradient of the
+    # whole expression equal to the gradient of w — as if quantization didn't happen.
+    #
+    # Forward: returns w_deq (quantized value)
+    # Backward: gradient is as if we returned w (identity)
+    return w + (w_deq - w).detach()
+
+
+
 # -----------------------------
 # HYPERPARAMETERS
 # -----------------------------
@@ -509,9 +553,9 @@ class RMSNorm(nn.Module):
 class CastedLinear(nn.Linear):
     # Keep weights in fp32 for optimizer/state quality, cast at matmul time for bf16 compute.
     def forward(self, x: Tensor) -> Tensor:
-        bias = self.bias.to(x.dtype) if self.bias is not None else None
-        return F.linear(x, self.weight.to(x.dtype), bias)
-
+            bias = self.bias.to(x.dtype) if self.bias is not None else None
+            w = fake_quantize_4bit(self.weight)
+            return F.linear(x, w.to(x.dtype), bias)
 
 def restore_low_dim_params_to_fp32(module: nn.Module) -> None:
     # Keep small/control parameters in fp32 even when the model body runs in bf16.
@@ -733,7 +777,7 @@ def main() -> None:
 
     code = Path(__file__).read_text(encoding="utf-8")
     args = Hyperparameters()
-    zeropower_via_newtonschulz5 = torch.compile(zeropower_via_newtonschulz5)
+    # zeropower_via_newtonschulz5 = torch.compile(zeropower_via_newtonschulz5)
 
     # -----------------------------
     # DISTRIBUTED + CUDA SETUP
@@ -764,9 +808,9 @@ def main() -> None:
     from torch.backends.cuda import enable_cudnn_sdp, enable_flash_sdp, enable_math_sdp, enable_mem_efficient_sdp
 
     enable_cudnn_sdp(False)
-    enable_flash_sdp(True)
-    enable_mem_efficient_sdp(False)
-    enable_math_sdp(False)
+    enable_flash_sdp(False)
+    enable_mem_efficient_sdp(True)
+    enable_math_sdp(True)
 
     logfile = None
     if master_process:
@@ -840,7 +884,7 @@ def main() -> None:
         if isinstance(module, CastedLinear):
             module.float()
     restore_low_dim_params_to_fp32(base_model)
-    compiled_model = torch.compile(base_model, dynamic=False, fullgraph=True)
+    compiled_model = base_model
     model: nn.Module = DDP(compiled_model, device_ids=[local_rank], broadcast_buffers=False) if distributed else compiled_model
 
     # Optimizer split:

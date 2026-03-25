@@ -1,0 +1,202 @@
+[
+  {
+    "params": 13385272,
+    "val_loss": 2.5386,
+    "val_bpb": 1.5035,
+    "train_time_ms": 600327.0,
+    "step_avg_ms": 757.99,
+    "steps": 792,
+    "peak_memory_mib": 8825,
+    "compressed_bytes": 5825248,
+    "compressed_mb": 5.825248,
+    "post_quant_loss": 2.61927756,
+    "post_quant_bpb": 1.55128371,
+    "name": "6bit_7Lx2",
+    "description": "7 layers x 2 repeats, 6-bit QAT (current best)",
+    "script": "train_gpt_6bit.py",
+    "elapsed_seconds": 973.3,
+    "timestamp": "2026-03-19 23:22",
+    "overrides": {
+      "NUM_LAYERS": "7",
+      "NUM_REPEATS": "2"
+    }
+  },
+  {
+    "params": 13385272,
+    "val_loss": 2.5259,
+    "val_bpb": 1.496,
+    "train_time_ms": 600306.0,
+    "step_avg_ms": 709.58,
+    "steps": 846,
+    "peak_memory_mib": 8825,
+    "compressed_bytes": 6136367,
+    "compressed_mb": 6.136367,
+    "post_quant_loss": 2.58933785,
+    "post_quant_bpb": 1.53355173,
+    "name": "6bit_7Lx2_adapters",
+    "description": "7 layers x 2 repeats with per-repeat adapters, 6-bit QAT",
+    "script": "train_gpt_6bit.py",
+    "elapsed_seconds": 943.7,
+    "timestamp": "2026-03-19 23:38",
+    "overrides": {
+      "NUM_LAYERS": "7",
+      "NUM_REPEATS": "2",
+      "USE_REPEAT_ADAPTERS": "1"
+    }
+  },
+  {
+    "params": 17059912,
+    "val_loss": 2.6159,
+    "val_bpb": 1.5493,
+    "train_time_ms": 600753.0,
+    "step_avg_ms": 996.27,
+    "steps": 603,
+    "peak_memory_mib": 10925,
+    "compressed_bytes": 10651557,
+    "compressed_mb": 10.651557,
+    "post_quant_loss": 2.62636471,
+    "post_quant_bpb": 1.55548111,
+    "name": "baseline_float_9L",
+    "description": "Original 9-layer float baseline",
+    "script": "train_gpt.py",
+    "elapsed_seconds": 1070.6,
+    "timestamp": "2026-03-20 00:07",
+    "overrides": {
+      "NUM_LAYERS": "9"
+    }
+  },
+  {
+    "params": 17059912,
+    "val_loss": 2.6264,
+    "val_bpb": 1.5555,
+    "train_time_ms": 600042.0,
+    "step_avg_ms": 1020.48,
+    "steps": 588,
+    "peak_memory_mib": 10925,
+    "compressed_bytes": 6360506,
+    "compressed_mb": 6.360506,
+    "post_quant_loss": 2.81264346,
+    "post_quant_bpb": 1.66580588,
+    "name": "baseline_6bit_9L",
+    "description": "9-layer with 6-bit QAT",
+    "script": "train_gpt_6bit.py",
+    "elapsed_seconds": 1125.0,
+    "timestamp": "2026-03-20 00:26",
+    "overrides": {
+      "NUM_LAYERS": "9"
+    }
+  },
+  {
+    "params": 7893024,
+    "val_loss": 3.0874,
+    "val_bpb": 1.8285,
+    "train_time_ms": 601088.0,
+    "step_avg_ms": 1890.21,
+    "steps": 318,
+    "peak_memory_mib": 18506,
+    "compressed_bytes": 2132276,
+    "compressed_mb": 2.132276,
+    "post_quant_loss": 3.72065572,
+    "post_quant_bpb": 2.20358189,
+    "name": "6bit_4Lx4_ada",
+    "description": "4 layers x 4 repeats (16 eff depth, ~8M params, very fast)",
+    "script": "train_gpt_6bit.py",
+    "elapsed_seconds": 37192.8,
+    "timestamp": "2026-03-20 10:46",
+    "overrides": {
+      "NUM_LAYERS": "4",
+      "NUM_REPEATS": "4",
+      "USE_REPEAT_ADAPTERS": "1"
+    }
+  },
+  {
+    "params": 17059912,
+    "val_loss": 2.5911,
+    "val_bpb": 1.5346,
+    "train_time_ms": 600146.0,
+    "step_avg_ms": 955.65,
+    "steps": 628,
+    "peak_memory_mib": 10925,
+    "compressed_bytes": 10825550,
+    "compressed_mb": 10.82555,
+    "post_quant_loss": 2.60085746,
+    "post_quant_bpb": 1.54037429,
+    "name": "baseline_float_9L",
+    "description": "Original 9-layer float baseline",
+    "script": "train_gpt.py",
+    "elapsed_seconds": 1008.5,
+    "timestamp": "2026-03-20 11:20",
+    "overrides": {
+      "NUM_LAYERS": "9"
+    }
+  },
+  {
+    "params": 9728552,
+    "val_loss": 2.8987,
+    "val_bpb": 1.7168,
+    "train_time_ms": 600889.0,
+    "step_avg_ms": 1521.24,
+    "steps": 395,
+    "peak_memory_mib": 17467,
+    "compressed_bytes": 2787657,
+    "compressed_mb": 2.787657,
+    "post_quant_loss": 3.50329925,
+    "post_quant_bpb": 2.07485115,
+    "name": "6bit_5Lx3_ada",
+    "description": "5 layers x 3 repeats (15 eff depth, ~10M params)",
+    "script": "train_gpt_6bit.py",
+    "elapsed_seconds": 1279.9,
+    "timestamp": "2026-03-20 11:42",
+    "overrides": {
+      "NUM_LAYERS": "5",
+      "NUM_REPEATS": "3",
+      "USE_REPEAT_ADAPTERS": "1"
+    }
+  },
+  {
+    "params": 9735208,
+    "val_loss": 3.2132,
+    "val_bpb": 1.9031,
+    "train_time_ms": 601887.0,
+    "step_avg_ms": 2033.4,
+    "steps": 296,
+    "peak_memory_mib": 22771,
+    "compressed_bytes": 2294118,
+    "compressed_mb": 2.294118,
+    "post_quant_loss": 4.11727313,
+    "post_quant_bpb": 2.43848106,
+    "name": "6bit_5Lx4_ada",
+    "description": "5 layers x 4 repeats (20 eff depth, ~10M params)",
+    "script": "train_gpt_6bit.py",
+    "elapsed_seconds": 1622.3,
+    "timestamp": "2026-03-20 12:09",
+    "overrides": {
+      "NUM_LAYERS": "5",
+      "NUM_REPEATS": "4",
+      "USE_REPEAT_ADAPTERS": "1"
+    }
+  },
+  {
+    "params": 11562032,
+    "val_loss": 2.7289,
+    "val_bpb": 1.6162,
+    "train_time_ms": 600616.0,
+    "step_avg_ms": 1210.92,
+    "steps": 496,
+    "peak_memory_mib": 14307,
+    "compressed_bytes": 3760861,
+    "compressed_mb": 3.760861,
+    "post_quant_loss": 3.07188851,
+    "post_quant_bpb": 1.8193454,
+    "name": "6bit_6Lx2_ada",
+    "description": "6 layers x 2 repeats (12 eff depth, ~12M params)",
+    "script": "train_gpt_6bit.py",
+    "elapsed_seconds": 3745.3,
+    "timestamp": "2026-03-20 13:11",
+    "overrides": {
+      "NUM_LAYERS": "6",
+      "NUM_REPEATS": "2",
+      "USE_REPEAT_ADAPTERS": "1"
+    }
+  }
+]
