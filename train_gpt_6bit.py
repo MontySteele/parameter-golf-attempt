@@ -855,6 +855,7 @@ def main() -> None:
     # -----------------------------
     # TOKENIZER + VALIDATION METRIC SETUP
     # -----------------------------
+    log0("@@PHASE:tokenizer")
 
     random.seed(args.seed)
     np.random.seed(args.seed)
@@ -881,6 +882,7 @@ def main() -> None:
     # -----------------------------
     # MODEL + OPTIMIZER SETUP
     # -----------------------------
+    log0("@@PHASE:model")
 
     base_model = GPT(
         vocab_size=args.vocab_size,
@@ -973,6 +975,7 @@ def main() -> None:
     # -----------------------------
     # DATA LOADER & MODEL WARMUP
     # -----------------------------
+    log0("@@PHASE:dataloader")
 
     train_loader = DistributedTokenLoader(args.train_files, rank, world_size, device)
 
@@ -1024,6 +1027,7 @@ def main() -> None:
     # -----------------------------
     # MAIN TRAINING LOOP
     # -----------------------------
+    log0("@@PHASE:training")
 
     training_time_ms = 0.0
     stop_after_step: int | None = None
@@ -1123,6 +1127,7 @@ def main() -> None:
     # -----------------------------
     # SERIALIZATION + ROUNDTRIP VALIDATION
     # -----------------------------
+    log0("@@PHASE:quantize")
     # Save the raw state (useful for debugging/loading in PyTorch directly), then always produce
     # the compressed int8+zlib artifact and validate the round-tripped weights.
 

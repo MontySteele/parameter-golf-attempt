@@ -19,90 +19,61 @@
         "SEED": "1337",
         "NUM_REPEATS": "1",
         "USE_REPEAT_ADAPTERS": "0",
-        "VAL_BATCH_SIZE": "131072"
+        "VAL_BATCH_SIZE": "131072",
+        "QAT_BITS": "6",
+        "EXPORT_BITS": "6",
+        "USE_FLASH_ATTN": "1",
+        "USE_TORCH_COMPILE": "0",
+        "USE_LEAKY_RELU": "1",
+        "USE_EMA": "0"
     },
 
     "experiments": {
 
-        "baseline_float_9L": {
-            "description": "Original 9-layer float baseline",
-            "script": "train_gpt.py",
-            "NUM_LAYERS": "9"
-        },
         "6bit_5Lx3_ada": {
             "description": "5 layers x 3 repeats (15 eff depth, ~10M params)",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "5",
             "NUM_REPEATS": "3",
             "USE_REPEAT_ADAPTERS": "1"
         },
-        "6bit_5Lx4_ada": {
-            "description": "5 layers x 4 repeats (20 eff depth, ~10M params)",
-            "script": "train_gpt_6bit.py",
-            "NUM_LAYERS": "5",
-            "NUM_REPEATS": "4",
-            "USE_REPEAT_ADAPTERS": "1"
-        },
         "6bit_6Lx2_ada": {
             "description": "6 layers x 2 repeats (12 eff depth, ~12M params)",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "6",
             "NUM_REPEATS": "2",
             "USE_REPEAT_ADAPTERS": "1"
         },
         "6bit_6Lx3_ada": {
             "description": "6 layers x 3 repeats (18 eff depth, ~12M params)",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "6",
             "NUM_REPEATS": "3",
             "USE_REPEAT_ADAPTERS": "1"
         },
         "6bit_7Lx2": {
             "description": "7 layers x 2 repeats without adapters",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "7",
             "NUM_REPEATS": "2"
         },
         "6bit_7Lx2_ada": {
             "description": "7 layers x 2 repeats with adapters (current best)",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "7",
             "NUM_REPEATS": "2",
-            "USE_REPEAT_ADAPTERS": "1"
-        },
-        "6bit_7Lx3_ada": {
-            "description": "7 layers x 3 repeats (21 eff depth)",
-            "script": "train_gpt_6bit.py",
-            "NUM_LAYERS": "7",
-            "NUM_REPEATS": "3",
             "USE_REPEAT_ADAPTERS": "1"
         },
         "6bit_8Lx2_ada": {
             "description": "8 layers x 2 repeats (16 eff depth, balanced U-Net)",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "8",
             "NUM_REPEATS": "2",
             "USE_REPEAT_ADAPTERS": "1"
-        },
-        "6bit_8Lx3_ada": {
-            "description": "8 layers x 3 repeats (24 eff depth)",
-            "script": "train_gpt_6bit.py",
-            "NUM_LAYERS": "8",
-            "NUM_REPEATS": "3",
-            "USE_REPEAT_ADAPTERS": "1"
-        },
-
-        "6bit_7Lx2_ada_dim384": {
-            "description": "7Lx2 adapters, narrow dim=384",
-            "script": "train_gpt_6bit.py",
-            "NUM_LAYERS": "7",
-            "NUM_REPEATS": "2",
-            "USE_REPEAT_ADAPTERS": "1",
-            "MODEL_DIM": "384"
         },
         "6bit_7Lx2_ada_dim448": {
             "description": "7Lx2 adapters, dim=448",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "7",
             "NUM_REPEATS": "2",
             "USE_REPEAT_ADAPTERS": "1",
@@ -110,7 +81,7 @@
         },
         "6bit_7Lx2_ada_dim576": {
             "description": "7Lx2 adapters, dim=576",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "7",
             "NUM_REPEATS": "2",
             "USE_REPEAT_ADAPTERS": "1",
@@ -118,24 +89,15 @@
         },
         "6bit_7Lx2_ada_dim640": {
             "description": "7Lx2 adapters, wide dim=640",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "7",
             "NUM_REPEATS": "2",
             "USE_REPEAT_ADAPTERS": "1",
             "MODEL_DIM": "640"
         },
-        "6bit_7Lx2_ada_dim768": {
-            "description": "7Lx2 adapters, very wide dim=768",
-            "script": "train_gpt_6bit.py",
-            "NUM_LAYERS": "7",
-            "NUM_REPEATS": "2",
-            "USE_REPEAT_ADAPTERS": "1",
-            "MODEL_DIM": "768"
-        },
-
         "6bit_7Lx2_ada_mlp1": {
             "description": "7Lx2 adapters, minimal MLP (1x)",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "7",
             "NUM_REPEATS": "2",
             "USE_REPEAT_ADAPTERS": "1",
@@ -143,7 +105,7 @@
         },
         "6bit_7Lx2_ada_mlp3": {
             "description": "7Lx2 adapters, wide MLP (3x)",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "7",
             "NUM_REPEATS": "2",
             "USE_REPEAT_ADAPTERS": "1",
@@ -151,7 +113,7 @@
         },
         "6bit_7Lx2_ada_mlp4": {
             "description": "7Lx2 adapters, very wide MLP (4x)",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "7",
             "NUM_REPEATS": "2",
             "USE_REPEAT_ADAPTERS": "1",
@@ -160,7 +122,7 @@
 
         "6bit_7Lx2_ada_kv2": {
             "description": "7Lx2 adapters, 2 KV heads (more efficient)",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "7",
             "NUM_REPEATS": "2",
             "USE_REPEAT_ADAPTERS": "1",
@@ -168,7 +130,7 @@
         },
         "6bit_7Lx2_ada_kv8": {
             "description": "7Lx2 adapters, 8 KV heads (full MHA)",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "7",
             "NUM_REPEATS": "2",
             "USE_REPEAT_ADAPTERS": "1",
@@ -176,7 +138,7 @@
         },
         "6bit_7Lx2_ada_heads16_kv4": {
             "description": "7Lx2 adapters, 16 query heads (head_dim=32)",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "7",
             "NUM_REPEATS": "2",
             "USE_REPEAT_ADAPTERS": "1",
@@ -185,7 +147,7 @@
         },
         "6bit_7Lx2_ada_heads4_kv4": {
             "description": "7Lx2 adapters, 4 query heads (head_dim=128)",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "7",
             "NUM_REPEATS": "2",
             "USE_REPEAT_ADAPTERS": "1",
@@ -195,7 +157,7 @@
 
         "6bit_7Lx2_ada_lr_up20": {
             "description": "7Lx2 adapters, LRs +20%",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "7",
             "NUM_REPEATS": "2",
             "USE_REPEAT_ADAPTERS": "1",
@@ -205,7 +167,7 @@
         },
         "6bit_7Lx2_ada_lr_up50": {
             "description": "7Lx2 adapters, LRs +50%",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "7",
             "NUM_REPEATS": "2",
             "USE_REPEAT_ADAPTERS": "1",
@@ -215,7 +177,7 @@
         },
         "6bit_7Lx2_ada_lr_down20": {
             "description": "7Lx2 adapters, LRs -20%",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "7",
             "NUM_REPEATS": "2",
             "USE_REPEAT_ADAPTERS": "1",
@@ -226,7 +188,7 @@
 
         "6bit_5Lx3_ada_dim640": {
             "description": "5Lx3 adapters at dim=640 — fast steps, wider",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "5",
             "NUM_REPEATS": "3",
             "USE_REPEAT_ADAPTERS": "1",
@@ -234,7 +196,7 @@
         },
         "6bit_6Lx3_ada_dim576": {
             "description": "6Lx3 adapters at dim=576",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "6",
             "NUM_REPEATS": "3",
             "USE_REPEAT_ADAPTERS": "1",
@@ -242,7 +204,7 @@
         },
         "6bit_6Lx2_ada_dim640": {
             "description": "6Lx2 adapters at dim=640",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "6",
             "NUM_REPEATS": "2",
             "USE_REPEAT_ADAPTERS": "1",
@@ -250,7 +212,7 @@
         },
         "6bit_7Lx2_ada_dim576_mlp3": {
             "description": "7Lx2 adapters, dim=576, MLP 3x",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "7",
             "NUM_REPEATS": "2",
             "USE_REPEAT_ADAPTERS": "1",
@@ -259,7 +221,7 @@
         },
         "6bit_8Lx2_ada_dim576": {
             "description": "8Lx2 adapters at dim=576",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "8",
             "NUM_REPEATS": "2",
             "USE_REPEAT_ADAPTERS": "1",
@@ -268,15 +230,256 @@
 
         "6bit_5Lx3_noadapt": {
             "description": "5Lx3 without adapters (ablation)",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "5",
             "NUM_REPEATS": "3"
         },
         "6bit_6Lx3_noadapt": {
             "description": "6Lx3 without adapters (ablation)",
-            "script": "train_gpt_6bit.py",
+            "script": "train_gpt_unified.py",
             "NUM_LAYERS": "6",
             "NUM_REPEATS": "3"
+        },
+
+        "4bit_7Lx2_ada": {
+            "description": "7Lx2 adapters with 4-bit QAT + 4-bit export",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1",
+            "QAT_BITS": "4",
+            "EXPORT_BITS": "4"
+        },
+        "5bit_7Lx2_ada": {
+            "description": "7Lx2 adapters with 5-bit QAT + 5-bit export",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1",
+            "QAT_BITS": "5",
+            "EXPORT_BITS": "5"
+        },
+        "8bit_7Lx2_ada": {
+            "description": "7Lx2 adapters with 8-bit QAT + 8-bit export (more precision, larger artifact)",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1",
+            "QAT_BITS": "8",
+            "EXPORT_BITS": "8"
+        },
+
+        "6bit_10L": {
+            "description": "10 unique layers, 6-bit QAT (frontier uses 11 unique layers)",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "10"
+        },
+        "6bit_11L": {
+            "description": "11 unique layers, 6-bit QAT (matches frontier layer count)",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "11"
+        },
+        "6bit_11L_dim576": {
+            "description": "11 unique layers at dim=576, 6-bit QAT",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "11",
+            "MODEL_DIM": "576"
+        },
+
+        "noqat_9L_6bit_export": {
+            "description": "9L no QAT during training, 6-bit export only (QAT ablation)",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "9",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "6"
+        },
+
+        "noqat_10L_6bit_export": {
+            "description": "10L no QAT, 6-bit export — scaling the winning no-QAT strategy",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "10",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "6"
+        },
+        "noqat_11L_6bit_export": {
+            "description": "11L no QAT, 6-bit export — max unique layers",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "11",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "6"
+        },
+        "noqat_9L_8bit_export": {
+            "description": "9L no QAT, 8-bit export — test if higher export precision helps",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "9",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "8"
+        },
+
+        "noqat_9L_leaky_6bit": {
+            "description": "9L no QAT, leakyReLU² (activation change only, baseline comparison)",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "9",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "6"
+        },
+        "noqat_9L_ema_6bit": {
+            "description": "9L no QAT, EMA 0.997 (weight averaging only)",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "9",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "6",
+            "USE_EMA": "1"
+        },
+        "noqat_10L_leaky_ema_6bit": {
+            "description": "10L no QAT, leakyReLU² + EMA — best combo on more layers",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "10",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "6",
+            "USE_EMA": "1"
+        },
+        "noqat_11L_leaky_ema_6bit": {
+            "description": "11L no QAT, leakyReLU² + EMA — max layers with all improvements",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "11",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "6",
+            "USE_EMA": "1"
+        },
+        "noqat_11L_leaky_ema_8bit": {
+            "description": "11L no QAT, leakyReLU² + EMA, 8-bit export",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "11",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "8",
+            "USE_EMA": "1"
+        },
+        "noqat_12L_leaky_ema_6bit": {
+            "description": "12L no QAT, leakyReLU² + EMA — push beyond 11L",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "12",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "6",
+            "USE_EMA": "1"
+        },
+
+        "noqat_9L_seq512_6bit": {
+            "description": "9L no QAT, seq_len=512 (shorter context, 2x batch)",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "9",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "6",
+            "TRAIN_SEQ_LEN": "512"
+        },
+        "noqat_9L_seq2048_6bit": {
+            "description": "9L no QAT, seq_len=2048 (longer context, 0.5x batch)",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "9",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "6",
+            "TRAIN_SEQ_LEN": "2048"
+        },
+
+        "noqat_7Lx2_ada_leaky_ema_6bit": {
+            "description": "7Lx2 recurrence + adapters, no QAT, leakyReLU² + EMA",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "7",
+            "NUM_REPEATS": "2",
+            "USE_REPEAT_ADAPTERS": "1",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "6",
+            "USE_EMA": "1"
+        },
+
+        "noqat_9L_lr_up20_6bit": {
+            "description": "9L no QAT, LRs +20% — LR sweep for no-QAT regime",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "9",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "6",
+            "TIED_EMBED_LR": "0.06",
+            "MATRIX_LR": "0.048",
+            "SCALAR_LR": "0.048"
+        },
+        "noqat_9L_lr_down20_6bit": {
+            "description": "9L no QAT, LRs -20% — LR sweep for no-QAT regime",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "9",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "6",
+            "TIED_EMBED_LR": "0.04",
+            "MATRIX_LR": "0.032",
+            "SCALAR_LR": "0.032"
+        },
+
+        "noqat_9L_relu2_6bit": {
+            "description": "9L no QAT, relu² (original activation, clean A/B vs leakyReLU²)",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "9",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "6",
+            "USE_LEAKY_RELU": "0"
+        },
+
+        "noqat_9L_warmdown400_6bit": {
+            "description": "9L no QAT, short warmdown (400 steps)",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "9",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "6",
+            "WARMDOWN_ITERS": "400"
+        },
+        "noqat_9L_warmdown2400_6bit": {
+            "description": "9L no QAT, long warmdown (2400 steps)",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "9",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "6",
+            "WARMDOWN_ITERS": "2400"
+        },
+
+        "noqat_9L_dim576_6bit": {
+            "description": "9L no QAT, dim=576 — wider model",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "9",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "6",
+            "MODEL_DIM": "576"
+        },
+        "noqat_10L_dim576_6bit": {
+            "description": "10L no QAT, dim=576",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "10",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "6",
+            "MODEL_DIM": "576"
+        },
+        "noqat_9L_dim640_6bit": {
+            "description": "9L no QAT, dim=640 — even wider",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "9",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "6",
+            "MODEL_DIM": "640"
+        },
+
+        "noqat_9L_kv8_6bit": {
+            "description": "9L no QAT, full MHA (8 KV heads) — was best with QAT",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "9",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "6",
+            "NUM_KV_HEADS": "8"
+        },
+        "noqat_9L_heads4_kv4_6bit": {
+            "description": "9L no QAT, 4 heads (head_dim=128) — was strong with QAT",
+            "script": "train_gpt_unified.py",
+            "NUM_LAYERS": "9",
+            "QAT_BITS": "0",
+            "EXPORT_BITS": "6",
+            "NUM_HEADS": "4",
+            "NUM_KV_HEADS": "4"
         }
     }
 }
